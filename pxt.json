@@ -1,0 +1,24 @@
+{
+    "name": "Tinybit",
+    "version": "1.0.0",
+    "description": "Extension for YahBoom Tiny:bit",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*",
+        "neopixel": "github:lzty634158/pxt-neopixel",
+        "Mbit_IR":  "github:lzty634158/yahboom_mbit_IR"
+	
+
+    },
+    "files": [
+        "README.md",
+        "main.ts",
+        "_locales/zh-cn/Tinybit-strings.json",
+        "_locales/zh-tw/Tinybit-strings.json"
+
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true
+}
