@@ -5,6 +5,7 @@
   "Tinybit.RGB_Car_Big|block": "小車RGB探照燈|選擇車燈顏色 %value",
   "Tinybit.RGB_Car_Big2|block": "小車RGB探照燈|紅色 %value1|綠色 %value2|藍色 %value3",
   "HelloBot.Music_Car|block": "小車音樂播放|%index",
+  "Tinybit.Voice_Sensor|block": "聲音傳感器返回",
   "HelloBot.Line_Sensor|block": "巡線傳感器|位置 %direct|檢測到 %value",
   "HelloBot.CarCtrl|block": "小車控制|%index",
   "HelloBot.CarCtrlSpeed|block": "小車控制|%index|速度 %speed",

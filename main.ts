@@ -359,6 +359,20 @@ namespace Tinybit {
         return temp;
 
     }
+
+    //% blockId=Tinybit_Voice_Sensor block="Voice Sensor return"
+    //% weight=88
+    //% blockGap=10
+    //% color="#006400"
+    //% name.fieldEditor="gridpicker" name.fieldOptions.columns=12
+    export function Voice_Sensor(): number {
+	    //pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
+        let temp;		
+        temp = pins.analogReadPin(AnalogPin.P1);           
+            
+        return temp;
+
+    }
         
 	//% blockId=Tinybit_ultrasonic_car block="ultrasonic return distance(cm)"
     //% color="#006400"

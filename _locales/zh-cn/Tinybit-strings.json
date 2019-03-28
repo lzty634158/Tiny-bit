@@ -5,6 +5,7 @@
   "Tinybit.RGB_Car_Big|block": "小车RGB探照灯|选择车灯颜色 %value",
   "Tinybit.RGB_Car_Big2|block": "小车RGB探照灯|红色 %value1|绿色 %value2|蓝色 %value3",
   "Tinybit.Music_Car|block": "小车音乐播放|%index",
+  "Tinybit.Voice_Sensor|block": "声音传感器返回",
   "Tinybit.Line_Sensor|block": "巡线传感器|位置 %direct|检测到 %value",
   "Tinybit.CarCtrl|block": "小车控制|%index",
   "Tinybit.CarCtrlSpeed|block": "小车控制|%index|速度 %speed",
