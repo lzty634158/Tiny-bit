@@ -68,9 +68,9 @@ namespace Tinybit {
 
     export enum enLineState {
         //% blockId="White" block="White Line"
-        White = 1,
+        White = 0,
         //% blockId="Black" block="Black Line"
-        Black = 0
+        Black = 1
     }
     
     export enum enTouchState {
