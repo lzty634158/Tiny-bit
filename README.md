@@ -1,6 +1,6 @@
-# HelloBot
+# Tiny:bit
 
-Extension for Yahboom Tiny:bit 
+Extension for Yahboom Tiny:bit V1.1
 
 ## License
 
