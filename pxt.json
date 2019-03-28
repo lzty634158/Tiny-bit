@@ -4,8 +4,7 @@
     "description": "Extension for YahBoom Tiny:bit",
     "license": "MIT",
     "dependencies": {
-        "core": "*",
-        "Mbit_IR":  "github:lzty634158/yahboom_mbit_IR"
+        "core": "*"
 	
 
     },
