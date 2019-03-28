@@ -8,26 +8,10 @@ load dependency
 //% color="#006400" weight=20 icon="\uf1b9"
 namespace Tinybit {
 
-    const PCA9685_ADD = 0x41
-    const MODE1 = 0x00
-    const MODE2 = 0x01
-    const SUBADR1 = 0x02
-    const SUBADR2 = 0x03
-    const SUBADR3 = 0x04
-
-    const LED0_ON_L = 0x06
-    const LED0_ON_H = 0x07
-    const LED0_OFF_L = 0x08
-    const LED0_OFF_H = 0x09
-
-    const ALL_LED_ON_L = 0xFA
-    const ALL_LED_ON_H = 0xFB
-    const ALL_LED_OFF_L = 0xFC
-    const ALL_LED_OFF_H = 0xFD
-
-    const PRESCALE = 0xFE
-
-    let initialized = false
+    const PWM_ADD = 0x01
+    const MOTOR = 0x02
+    const RGB = 0x01
+    
     let yahStrip: neopixel.Strip;
 
     export enum enColor {
@@ -103,13 +87,6 @@ namespace Tinybit {
 
     }
     
-    export enum enServo {
-        
-        S1 = 1,
-        S2,
-        S3,
-        S4
-    }
     export enum CarState {
         //% blockId="Car_Run" block="Run"
         Car_Run = 1,
@@ -127,251 +104,69 @@ namespace Tinybit {
         Car_SpinRight = 7
     }
 
-    function i2cwrite(addr: number, reg: number, value: number) {
-        let buf = pins.createBuffer(2)
-        buf[0] = reg
-        buf[1] = value
-        pins.i2cWriteBuffer(addr, buf)
+    function setPwmRGB(red: number, green: number, blue: number): void {
+
+        let buf = pins.createBuffer(4);
+        buf[0] = RGB;
+        buf[1] = red;
+        buf[2] = green;
+        buf[3] = blue;
+        
+        pins.i2cWriteBuffer(PWM_ADD, buf);
     }
 
-    function i2ccmd(addr: number, value: number) {
-        let buf = pins.createBuffer(1)
-        buf[0] = value
-        pins.i2cWriteBuffer(addr, buf)
-    }
-
-    function i2cread(addr: number, reg: number) {
-        pins.i2cWriteNumber(addr, reg, NumberFormat.UInt8BE);
-        let val = pins.i2cReadNumber(addr, NumberFormat.UInt8BE);
-        return val;
-    }
-
-    function initPCA9685(): void {
-        i2cwrite(PCA9685_ADD, MODE1, 0x00)
-        setFreq(50);
-        initialized = true
-    }
-
-    function setFreq(freq: number): void {
-        // Constrain the frequency
-        let prescaleval = 25000000;
-        prescaleval /= 4096;
-        prescaleval /= freq;
-        prescaleval -= 1;
-        let prescale = prescaleval; //Math.Floor(prescaleval + 0.5);
-        let oldmode = i2cread(PCA9685_ADD, MODE1);
-        let newmode = (oldmode & 0x7F) | 0x10; // sleep
-        i2cwrite(PCA9685_ADD, MODE1, newmode); // go to sleep
-        i2cwrite(PCA9685_ADD, PRESCALE, prescale); // set the prescaler
-        i2cwrite(PCA9685_ADD, MODE1, oldmode);
-        control.waitMicros(5000);
-        i2cwrite(PCA9685_ADD, MODE1, oldmode | 0xa1);
-    }
-
-    function setPwm(channel: number, on: number, off: number): void {
-        if (channel < 0 || channel > 15)
+    function setPwmMotor(mode: number, speed1: number, speed2: number): void {
+        if (mode < 0 || mode > 6)
             return;
-        if (!initialized) {
-            initPCA9685();
-        }
+        
         let buf = pins.createBuffer(5);
-        buf[0] = LED0_ON_L + 4 * channel;
-        buf[1] = on & 0xff;
-        buf[2] = (on >> 8) & 0xff;
-        buf[3] = off & 0xff;
-        buf[4] = (off >> 8) & 0xff;
-        pins.i2cWriteBuffer(PCA9685_ADD, buf);
+        buf[0] = MOTOR;
+        switch (mode) { 
+            case 0: buf[1] = 0; buf[2] = 0; buf[3] = 0; buf[4] = 0; break;              //stop
+            case 1: buf[1] = speed1; buf[2] = 0; buf[3] = speed2; buf[4] = 0; break;    //run
+            case 2: buf[1] = 0; buf[2] = speed1; buf[3] = 0; buf[4] = speed2; break;    //back
+            case 3: buf[1] = 0; buf[2] = 0; buf[3] = speed2; buf[4] = 0; break;         //left
+            case 4: buf[1] = speed1; buf[2] = 0; buf[3] = 0; buf[4] = 0; break;         //right
+            case 5: buf[1] = 0; buf[2] = speed1; buf[3] = speed2; buf[4] = 0; break;    //tleft
+            case 6: buf[1] = speed1; buf[2] = 0; buf[3] = 0; buf[4] = speed2; break;    //tright
+        }
+        pins.i2cWriteBuffer(PWM_ADD, buf);
     }
 
     function Car_run(speed1: number, speed2: number) {
 
-        speed1 = speed1 * 16; // map 350 to 4096
-        speed2 = speed2 * 16;
-        if (speed1 >= 4096) {
-            speed1 = 4095
-        }
-        if (speed1 <= 350) {
-            speed1 = 350
-        }
-        if (speed2 >= 4096) {
-            speed2 = 4095
-        }
-        if (speed2 <= 350) {
-            speed2 = 350
-        }
 
-        setPwm(12, 0, speed1);
-        setPwm(13, 0, 0);
-
-        setPwm(15, 0, speed2);
-        setPwm(14, 0, 0);
-        //pins.digitalWritePin(DigitalPin.P16, 1);
-       // pins.analogWritePin(AnalogPin.P1, 1023-speed); //速度控制
-
-       // pins.analogWritePin(AnalogPin.P0, speed);//速度控制
-       // pins.digitalWritePin(DigitalPin.P8, 0);
+        setPwmMotor(1, speed1, speed2);
     }
 
     function Car_back(speed1: number, speed2: number) {
 
-        speed1 = speed1 * 16; // map 350 to 4096
-        speed2 = speed2 * 16;
-        if (speed1 >= 4096) {
-            speed1 = 4095
-        }
-        if (speed1 <= 350) {
-            speed1 = 350
-        }
-        if (speed2 >= 4096) {
-            speed2 = 4095
-        }
-        if (speed2 <= 350) {
-            speed2 = 350
-        }
-
-        setPwm(12, 0, 0);
-        setPwm(13, 0, speed1);
-
-        setPwm(15, 0, 0);
-        setPwm(14, 0, speed2);
-
-        //pins.digitalWritePin(DigitalPin.P16, 0);
-        //pins.analogWritePin(AnalogPin.P1, speed); //速度控制
-
-        //pins.analogWritePin(AnalogPin.P0, 1023 - speed);//速度控制
-        //pins.digitalWritePin(DigitalPin.P8, 1);
+        setPwmMotor(2, speed1, speed2);
     }
 
     function Car_left(speed1: number, speed2: number) {
 
-        speed1 = speed1 * 16; // map 350 to 4096
-        speed2 = speed2 * 16;
-        if (speed1 >= 4096) {
-            speed1 = 4095
-        }
-        if (speed1 <= 350) {
-            speed1 = 350
-        }
-        if (speed2 >= 4096) {
-            speed2 = 4095
-        }
-        if (speed2 <= 350) {
-            speed2 = 350
-        }
-        
-        setPwm(12, 0, 0);
-        setPwm(13, 0, 0);
-
-        setPwm(15, 0, speed2);
-        setPwm(14, 0, 0);
-
-        //pins.analogWritePin(AnalogPin.P0, speed);
-        //pins.digitalWritePin(DigitalPin.P8, 0);
-
-        //pins.digitalWritePin(DigitalPin.P16, 0);
-        //pins.digitalWritePin(DigitalPin.P1, 0);
+        setPwmMotor(3, speed1, speed2);
     }
 
     function Car_right(speed1: number, speed2: number) {
 
-        speed1 = speed1 * 16; // map 350 to 4096
-        speed2 = speed2 * 16;
-        if (speed1 >= 4096) {
-            speed1 = 4095
-        }
-        if (speed1 <= 350) {
-            speed1 = 350
-        }
-        if (speed2 >= 4096) {
-            speed2 = 4095
-        }
-        if (speed2 <= 350) {
-            speed2 = 350
-        }
-        
-        setPwm(12, 0, speed1);
-        setPwm(13, 0, 0);
-
-        setPwm(15, 0, 0);
-        setPwm(14, 0, 0);
-        //pins.digitalWritePin(DigitalPin.P0, 0);
-        //pins.digitalWritePin(DigitalPin.P8, 0);
-
-        //pins.digitalWritePin(DigitalPin.P16, 1);
-       // pins.analogWritePin(AnalogPin.P1, 1023 - speed);
+        setPwmMotor(4, speed1, speed2);
     }
 
     function Car_stop() {
        
-        setPwm(12, 0, 0);
-        setPwm(13, 0, 0);
-
-        setPwm(15, 0, 0);
-        setPwm(14, 0, 0);
-        //pins.digitalWritePin(DigitalPin.P0, 0);
-        //pins.digitalWritePin(DigitalPin.P8, 0);
-        //pins.digitalWritePin(DigitalPin.P16, 0);
-        //pins.digitalWritePin(DigitalPin.P1, 0);
+        setPwmMotor(0, 0, 0);
     }
 
     function Car_spinleft(speed1: number, speed2: number) {
 
-        speed1 = speed1 * 16; // map 350 to 4096
-        speed2 = speed2 * 16;
-        if (speed1 >= 4096) {
-            speed1 = 4095
-        }
-        if (speed1 <= 350) {
-            speed1 = 350
-        }
-        if (speed2 >= 4096) {
-            speed2 = 4095
-        }
-        if (speed2 <= 350) {
-            speed2 = 350
-        }        
-        
-        setPwm(12, 0, 0);
-        setPwm(13, 0, speed1);
-
-        setPwm(15, 0, speed2);
-        setPwm(14, 0, 0);
-
-        //pins.analogWritePin(AnalogPin.P0, speed);
-        //pins.digitalWritePin(DigitalPin.P8, 0);
-
-        //pins.digitalWritePin(DigitalPin.P16, 0);
-        //pins.analogWritePin(AnalogPin.P1, speed);
+        setPwmMotor(5, speed1, speed2);
     } 
 
     function Car_spinright(speed1: number, speed2: number) {
 
-        speed1 = speed1 * 16; // map 350 to 4096
-        speed2 = speed2 * 16;
-        if (speed1 >= 4096) {
-            speed1 = 4095
-        }
-        if (speed1 <= 350) {
-            speed1 = 350
-        }
-        if (speed2 >= 4096) {
-            speed2 = 4095
-        }
-        if (speed2 <= 350) {
-            speed2 = 350
-        }    
-            
-        setPwm(12, 0, speed1);
-        setPwm(13, 0, 0);
-
-        setPwm(15, 0, 0);
-        setPwm(14, 0, speed2);
-        //pins.analogWritePin(AnalogPin.P0, 1023-speed);
-        //pins.digitalWritePin(DigitalPin.P8, 1);
-
-        //pins.digitalWritePin(DigitalPin.P16, 1);
-        //pins.analogWritePin(AnalogPin.P1, 1023-speed);
-
+        setPwmMotor(6, speed1, speed2);
     }
 
     /**
@@ -387,7 +182,7 @@ namespace Tinybit {
     export function RGB_Car_Program(): neopixel.Strip {
          
         if (!yahStrip) {
-            yahStrip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB);
+            yahStrip = neopixel.create(DigitalPin.P12, 3, NeoPixelMode.RGB);
         }
         return yahStrip;  
     }  
@@ -487,11 +282,11 @@ namespace Tinybit {
     export function Line_Sensor(direct: enPos, value: enLineState): boolean {
 
         let temp: boolean = false;
-				pins.setPull(DigitalPin.P1, PinPullMode.PullUp);
-				pins.setPull(DigitalPin.P2, PinPullMode.PullUp);
+				pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
+				pins.setPull(DigitalPin.P14, PinPullMode.PullUp);
         switch (direct) {
             case enPos.LeftState: {
-                if (pins.digitalReadPin(DigitalPin.P1) == value) {              
+                if (pins.digitalReadPin(DigitalPin.P13) == value) {              
                     temp = true;                  
                 }
                 else {                  
@@ -501,7 +296,7 @@ namespace Tinybit {
             }
 
             case enPos.RightState: {
-                if (pins.digitalReadPin(DigitalPin.P2) == value) {              
+                if (pins.digitalReadPin(DigitalPin.P14) == value) {              
                     temp = true;                  
                 }
                 else {
@@ -522,17 +317,17 @@ namespace Tinybit {
     export function Ultrasonic_Car(): number {
 
         // send pulse       
-        let list:Array<number> = [0, 0, 0, 0, 0];
+        let list: Array<number> = [0, 0, 0, 0, 0];
+        pins.setPull(DigitalPin.P16, PinPullMode.PullNone);
         for (let i = 0; i < 5; i++) {
-            pins.setPull(DigitalPin.P14, PinPullMode.PullNone);
-		        pins.digitalWritePin(DigitalPin.P14, 0);
-		        control.waitMicros(2);
-		        pins.digitalWritePin(DigitalPin.P14, 1);
-		        control.waitMicros(15);
-		        pins.digitalWritePin(DigitalPin.P14, 0);
-		
-		        let d = pins.pulseIn(DigitalPin.P15, PulseValue.High, 43200);
-		        list[i] = Math.floor(d / 40)
+            pins.digitalWritePin(DigitalPin.P16, 0);
+            control.waitMicros(2);
+            pins.digitalWritePin(DigitalPin.P16, 1);
+            control.waitMicros(15);
+            pins.digitalWritePin(DigitalPin.P16, 0);
+    
+            let d = pins.pulseIn(DigitalPin.P15, PulseValue.High, 43200);
+            list[i] = Math.floor(d / 40)
         }
         list.sort();
         let length = (list[1] + list[2] + list[3])/3;
