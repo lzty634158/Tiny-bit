@@ -1,10 +1,12 @@
 {
     "name": "Tinybit",
     "version": "1.0.0",
-    "description": "Extension for YahBoom Tiny:bit",
+    "description": "Extension for YahBoom Tiny:bit V1.0",
     "license": "MIT",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "neopixel": "github:microsoft/pxt-neopixel#v0.3.10",
+        "Mbit_IR":  "github:lzty634158/yahboom_mbit_IR"
 	
 
     },
