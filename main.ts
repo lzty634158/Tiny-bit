@@ -373,7 +373,7 @@ namespace Tinybit {
 
     }
         
-	//% blockId=Tinybit_ultrasonic_car block="ultrasonic return distance(cm)"
+	//% blockId=Tinybit_Ultrasonic_Car block="ultrasonic return distance(cm)"
     //% color="#006400"
     //% weight=87
     //% blockGap=10
