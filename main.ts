@@ -381,21 +381,18 @@ namespace Tinybit {
     export function Ultrasonic_Car(): number {
 
         // send pulse       
-        let list: Array<number> = [0, 0, 0, 0, 0];
+        
         pins.setPull(DigitalPin.P16, PinPullMode.PullNone);
-        for (let i = 0; i < 5; i++) {
-            pins.digitalWritePin(DigitalPin.P16, 0);
-            control.waitMicros(2);
-            pins.digitalWritePin(DigitalPin.P16, 1);
-            control.waitMicros(15);
-            pins.digitalWritePin(DigitalPin.P16, 0);
-    
-            let d = pins.pulseIn(DigitalPin.P15, PulseValue.High, 43200);
-            list[i] = Math.floor(d / 40)
-        }
-        list.sort();
-        let length = (list[1] + list[2] + list[3])/3;
-        return  Math.floor(length);
+        
+        pins.digitalWritePin(DigitalPin.P16, 0);
+        control.waitMicros(2);
+        pins.digitalWritePin(DigitalPin.P16, 1);
+        control.waitMicros(15);
+        pins.digitalWritePin(DigitalPin.P16, 0);
+
+        let d = pins.pulseIn(DigitalPin.P15, PulseValue.High, 43200);
+        let length = Math.floor(d / 40);
+        return  length;
     }
 
 
