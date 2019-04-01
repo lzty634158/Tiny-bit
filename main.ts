@@ -182,7 +182,7 @@ namespace Tinybit {
     export function RGB_Car_Program(): neopixel.Strip {
          
         if (!yahStrip) {
-            yahStrip = neopixel.create(DigitalPin.P12, 3, NeoPixelMode.RGB);
+            yahStrip = neopixel.create(DigitalPin.P12, 2, NeoPixelMode.RGB);
         }
         return yahStrip;  
     }  
