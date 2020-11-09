@@ -2,11 +2,11 @@
 Copyright (C): 2010-2019, Shenzhen Yahboom Tech
 modified from liusen
 load dependency
-"Tinybit": "file:../pxt-Tinybit"
+"TinybitJP": "file:../pxt-TinybitJP"
 */
 
 //% color="#006400" weight=20 icon="\uf1b9"
-namespace Tinybit {
+namespace TinybitJP {
 
     const PWM_ADD = 0x01
     const MOTOR = 0x02
