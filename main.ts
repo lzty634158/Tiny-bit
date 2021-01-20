@@ -36,27 +36,47 @@ namespace Tinybit {
     }
     export enum enMusic {
 
+        //% blockId="dadadum" block="dadadum"
         dadadum = 0,
+        //% blockId="entertainer" block="entertainer"
         entertainer,
+        //% blockId="prelude" block="prelude"
         prelude,
+        //% blockId="ode" block="ode"
         ode,
+        //% blockId="nyan" block="nyan"
         nyan,
+        //% blockId="ringtone" block="ringtone"
         ringtone,
+        //% blockId="funk" block="funk"
         funk,
+        //% blockId="blues" block="blues"
         blues,
-
+        //% blockId="birthday" block="birthday"
         birthday,
+        //% blockId="wedding" block="wedding"
         wedding,
+        //% blockId="funereal" block="funereal"
         funereal,
+        //% blockId="punchline" block="punchline"
         punchline,
+        //% blockId="baddy" block="baddy"
         baddy,
+        //% blockId="chase" block="chase"
         chase,
+        //% blockId="ba_ding" block="ba_ding"
         ba_ding,
+        //% blockId="wawawawaa" block="wawawawaa"
         wawawawaa,
+        //% blockId="jump_up" block="jump_up"
         jump_up,
+        //% blockId="jump_down" block="jump_down"
         jump_down,
+        //% blockId="power_up" block="power_up"
         power_up,
+        //% blockId="power_down" block="power_down"
         power_down
+
     }
     export enum enPos {
 
