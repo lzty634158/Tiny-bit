@@ -23,10 +23,7 @@
   "Tinybit.enPos.RightState|block": "右边",
   "Tinybit.enLineState.White|block": "白线",
   "Tinybit.enLineState.Black|block": "黑线",
-  "Tinybit.enTouchState.Get|block": "感受到",
-  "Tinybit.enTouchState.NoGet|block": "未感受到",
-  "Tinybit.enAvoidState.OBSTACLE|block": "有障碍物",
-  "Tinybit.enAvoidState.NOOBSTACLE|block": "无障碍物",
+
   
   "Tinybit.CarState.Car_Run|block": "前进",
   "Tinybit.CarState.Car_Back|block": "后退",

@@ -93,19 +93,6 @@ namespace Tinybit {
         Black = 1
     }
     
-    export enum enTouchState {
-        //% blockId="Get" block="Get"
-        Get = 0,
-        //% blockId="NoGet" block="NoGet"
-        NoGet = 1
-    }    
-    export enum enAvoidState {
-        //% blockId="OBSTACLE" block="Obstacle"
-        OBSTACLE = 1,
-        //% blockId="NOOBSTACLE" block="No Obstacle"
-        NOOBSTACLE = 0
-
-    }
     
     export enum CarState {
         //% blockId="Car_Run" block="Run"

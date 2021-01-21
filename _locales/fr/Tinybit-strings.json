@@ -2,11 +2,11 @@
 
   "Tinybit.Ultrasonic_Car|block": "Distance mesurée par ultrasonique (cm)",
   "Tinybit.RGB_Car_Program|block": "Couleur LED RGB arrière",
-  "Tinybit.RGB_Car_Big|block": "Régler couleur LED RGB avant sur %value",
+  "Tinybit.RGB_Car_Big|block": "Régler couleur LED | RGB avant sur %value",
   "Tinybit.RGB_Car_Big2|block": "Régler couleur LED RGB avant sur |valeur1 %value1|valeur2 %value2|valeur3 %value3",
   "Tinybit.Music_Car|block": "Jouer la musique|%index",
   "Tinybit.Voice_Sensor|block": "Volume capteur sonore",
-  "Tinybit.Line_Sensor|block": "Capteur de ligne détecte %direct|couleur %value",
+  "Tinybit.Line_Sensor|block": "Capteur de ligne |détecte %direct|couleur %value",
   "Tinybit.CarCtrl|block": "Déplacement mode1|%index",
   "Tinybit.CarCtrlSpeed|block": "Déplacement mode2|%index|avec vitesse %speed",
   "Tinybit.CarCtrlSpeed2|block": "Déplacement mode3|%index|avec vitesse 1 %speed1|avec vitesse 2 %speed2",
