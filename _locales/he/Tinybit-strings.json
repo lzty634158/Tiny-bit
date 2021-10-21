@@ -1,5 +1,4 @@
 {
-
   "Tinybit.Ultrasonic_Car|block": "מרחק שנמדד בעזרת הסופרסוניק (cm)",
   "Tinybit.RGB_Car_Program|block": "צבע LED RGB אחורי",
   "Tinybit.RGB_Car_Big|block": "הגדר צבע LED | RGB קידמי %value",
@@ -52,5 +51,4 @@
   "Tinybit.CarState.Car_Stop|block": "עצור",
   "Tinybit.CarState.Car_SpinLeft|block": "סיבוב שמאלה",
   "Tinybit.CarState.Car_SpinRight|block": "סיבוב ימינה"
-
 }
